@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package unique-identifier="id" version="3.0" xmlns="http://www.idpf.org/2007/opf" prefix="rendition: http://www.idpf.org/vocab/rendition/#">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <meta property="dcterms:modified">2018-06-16T16:07:25Z</meta>
+    <meta content="Ebook-lib 0.15.0" name="generator"/>
+    <dc:identifier id="id">0b97247a-b09a-47b3-adc9-f715043434a8</dc:identifier>
+  </metadata>
+  <manifest>
+    <item href="4d270761-713c-11e8-8c8d-e0accb6f7e09.xhtml" id="chapter_0" media-type="application/xhtml+xml"/>
+    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+    <item href="nav.xhtml" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="chapter_0"/>
+  </spine>
+</package>
