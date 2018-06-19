@@ -84,8 +84,11 @@ class EpubWriter:
             self.book.spine = ["nav"] + self.chapters
         else:
             self.book.spine = self.chapters
-
-        epub.write_epub('%s.epub' % self.title, self.book, {})
+        remove_strs = r'\/:*?"<>|'
+        write_title = self.title
+        for s in list(remove_strs):
+            write_title = write_title.replace(s, "#")
+        epub.write_epub('%s.epub' % write_title, self.book, {})
 
 
 if __name__ == "__main__":

@@ -42,6 +42,29 @@ def parse_answer_content(answer):
     return part_one + part_two
 
 
+def download_question(client, question_id):
+    r"""
+    下载
+    :param client:              已经登陆的客户端
+    :param question_id:         问题的id
+    :return:                    无
+    """
+    # 电子书
+    question = client.question(question_id)
+    title = question.title
+    ew = EpubWriter(title, with_catalog=False)
+    i = 0
+    for answer in question.answers:
+        ew.add_chapter(title, parse_answer_content(answer))
+        i = i + 1
+        print(u"正在处理第%d个回答" % i)
+        if i >= 1000:
+            break
+    print(u"处理完成！正在输出...")
+    ew.write()
+    print(u"《%s》输出成功!" % title)
+
+
 TOKEN_FILE = 'token.pkl'
 client = ZhihuClient()
 # 登录
@@ -51,21 +74,13 @@ else:
     client.login_in_terminal()
     client.save_token(TOKEN_FILE)
 
+question_ids = [
+    65218492
+]
+for question_id in question_ids:
+    download_question(client, question_id)
 
-# 电子书
-question = client.question(46508954)
-title = question.title
-ew = EpubWriter(title, with_catalog=False)
-i = 0
-for answer in question.answers:
-    ew.add_chapter(title, parse_answer_content(answer))
-    i = i + 1
-    print(u"正在处理第%d个回答" % i)
-    if i >= 1:
-        break
-print(u"处理完成！正在输出...")
-ew.write()
-print(u"输出成功!")
+
 
 
 
