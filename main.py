@@ -8,6 +8,9 @@ import time
 
 from zhihu_oauth import ZhihuClient
 from EpubWriter import EpubWriter
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def parse_answer_content(answer):
@@ -52,6 +55,7 @@ def download_question(client, question_id):
     # 电子书
     question = client.question(question_id)
     title = question.title
+    print(u'正在处理《%s》' % title)
     ew = EpubWriter(title, with_catalog=False)
     i = 0
     for answer in question.answers:
@@ -75,10 +79,12 @@ else:
     client.save_token(TOKEN_FILE)
 
 question_ids = [
-    65218492
+    276591262
 ]
 for question_id in question_ids:
     download_question(client, question_id)
+
+
 
 
 
