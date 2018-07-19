@@ -1,0 +1,4 @@
+requests==2.19.1
+beautifulsoup4==4.6.0
+ebooklib==0.17
+zhihu_oauth==0.0.41

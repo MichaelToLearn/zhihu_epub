@@ -105,3 +105,6 @@ venv.bak/
 /token.pkl
 .epub
 /*.epub
+
+./idea/*.*
+output/*.*

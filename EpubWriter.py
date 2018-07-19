@@ -88,7 +88,7 @@ class EpubWriter:
         write_title = self.title
         for s in list(remove_strs):
             write_title = write_title.replace(s, "#")
-        epub.write_epub('%s.epub' % write_title, self.book, {})
+        epub.write_epub('./output/%s.epub' % write_title, self.book, {})
 
 
 if __name__ == "__main__":
