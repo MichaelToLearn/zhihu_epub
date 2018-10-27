@@ -106,5 +106,5 @@ venv.bak/
 .epub
 /*.epub
 
-./idea/*.*
-output/*.*
+.idea/
+output/
