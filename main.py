@@ -7,11 +7,18 @@ import os
 import time
 
 from zhihu_oauth import ZhihuClient
+from zhihu_oauth.exception import GetDataErrorException
 from EpubWriter import EpubWriter
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
+#  --- 配置信息 ----
+# 每个问题最多下载多少个答案
+QUESTION_NUM = 500
+# 保存的登录凭证文件名
+TOKEN_FILE_NAME = 'token.pkl'
 
 def parse_answer_content(answer):
     r"""
@@ -53,6 +60,7 @@ def download_question(zhihu_client, current_question_id):
     """
     # 电子书
     question = zhihu_client.question(current_question_id)
+    # 登陆过期大的时候，不能获得标题
     title = question.title
     print(u'正在处理《%s》' % title)
     ew = EpubWriter(title, with_catalog=False)
@@ -61,7 +69,7 @@ def download_question(zhihu_client, current_question_id):
         ew.add_chapter(title, parse_answer_content(answer))
         i = i + 1
         print(u"正在处理第%d个回答" % i)
-        if i >= 1000:
+        if i >= QUESTION_NUM:
             break
     print(u"处理完成！正在输出...")
     ew.write()
@@ -73,14 +81,13 @@ def zhihu_login():
     知乎登陆
     :return:        登陆之后的客户端client
     """
-    token_file = 'token.pkl'
     client = ZhihuClient()
     # 登录
-    if os.path.isfile(token_file):
-        client.load_token(token_file)
+    if os.path.isfile(TOKEN_FILE_NAME):
+        client.load_token(TOKEN_FILE_NAME)
     else:
         client.login_in_terminal()
-        client.save_token(token_file)
+        client.save_token(TOKEN_FILE_NAME)
     return client
 
 
@@ -94,12 +101,25 @@ def read_questions():
     return [int(id_str) for id_str in question_id_strs]
 
 
-if __name__ == '__main__':
+def main():
     client = zhihu_login()
     question_ids = read_questions()
-    for question_id in question_ids:
-        download_question(client, question_id)
+    try:
+        for question_id in question_ids:
+            download_question(client, question_id)
+    except GetDataErrorException as e:
+        print(str(e))
+        if 'ERR_LOGIN_TICKET_EXPIRED' in str(e):
+            print(u'登录过期，重新请求登录...')
+            # 删除凭证，重新登陆
+            os.remove(TOKEN_FILE_NAME)
+            main()
+    except Exception as e:
+        print(e)
 
+
+if __name__ == '__main__':
+    main()
 
 
 
