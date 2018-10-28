@@ -66,7 +66,10 @@ def download_question(zhihu_client, current_question_id):
     ew = EpubWriter(title, with_catalog=False)
     i = 0
     for answer in question.answers:
-        ew.add_chapter(title, parse_answer_content(answer))
+        try:
+            ew.add_chapter(title, parse_answer_content(answer))
+        except:
+            continue
         i = i + 1
         print(u"正在处理第%d个回答" % i)
         if i >= QUESTION_NUM:
